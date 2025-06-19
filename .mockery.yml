@@ -1,0 +1,19 @@
+all: false
+dir: '{{.InterfaceDir}}'
+filename: mocks.go
+force-file-write: true
+formatter: goimports
+log-level: info
+structname: '{{.Mock}}{{.InterfaceName}}'
+pkgname: '{{.SrcPackageName}}'
+recursive: false
+require-template-schema-exists: true
+template: testify
+template-schema: '{{.Template}}.schema.json'
+packages:
+  go-urlshortner/internal/http-server/handlers/url/save:
+    config:
+      all: true
+  go-urlshortner/internal/http-server/handlers/url/redirect:
+    config:
+      all: true
