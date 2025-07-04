@@ -1,9 +1,6 @@
 package main
 
 import (
-	"context"
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 	"go-urlshortner/internal/config"
 	"go-urlshortner/internal/http-server/handlers/url/deleter"
 	"go-urlshortner/internal/http-server/handlers/url/redirect"
@@ -15,6 +12,9 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 const (
@@ -35,7 +35,7 @@ func main() {
 		log.Error("failed to load storage", sl.Err(err))
 		os.Exit(1)
 	}
-	defer storage.Close(context.Background())
+	defer storage.Close()
 
 	router := chi.NewRouter()
 
@@ -44,7 +44,7 @@ func main() {
 	router.Use(mwLogger.New(log))
 
 	router.Route("/url", func(r chi.Router) {
-		r.Use(middleware.BasicAuth("url-shortener", map[string]string {
+		r.Use(middleware.BasicAuth("url-shortener", map[string]string{
 			cfg.HTTPServer.User: cfg.HTTPServer.Password,
 		}))
 		r.Post("/", save.New(log, storage))
@@ -52,7 +52,6 @@ func main() {
 	})
 
 	router.Get("/{alias}", redirect.New(log, storage))
-
 
 	log.Info("starting server", slog.String("address", cfg.Address))
 

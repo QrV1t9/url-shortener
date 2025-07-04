@@ -106,7 +106,7 @@ func TestURLShortener_SaveRedirectRemove(t *testing.T) {
 
 			testRedirect(t, alias, tc.url)
 
-			reqDel := e.DELETE("/" + path.Join("url", alias)).
+			reqDel := e.DELETE("/"+path.Join("url", alias)).
 				WithBasicAuth("user", "pass").
 				Expect().Status(http.StatusOK).
 				JSON().Object()
@@ -133,9 +133,9 @@ func testRedirect(t *testing.T, alias string, urlToRedirect string) {
 
 func testRedirectNotFound(t *testing.T, alias string) {
 	u := url.URL{
-		Scheme:      "http",
-		Host:        host,
-		Path:        alias,
+		Scheme: "http",
+		Host:   host,
+		Path:   alias,
 	}
 
 	_, err := api.GetRedirect(u.String())

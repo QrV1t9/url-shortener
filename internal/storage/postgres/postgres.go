@@ -4,19 +4,21 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"go-urlshortner/internal/storage"
+
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
-	"go-urlshortner/internal/storage"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type Storage struct {
-	db *pgx.Conn
+	db *pgxpool.Pool
 }
 
 func New(url string) (*Storage, error) {
 	const op = "storage.postgres.new"
 
-	db, err := pgx.Connect(context.Background(), url)
+	db, err := pgxpool.New(context.Background(), url)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
@@ -31,15 +33,15 @@ func New(url string) (*Storage, error) {
 	_, err = db.Exec(context.Background(), stmt)
 
 	if err != nil {
-		db.Close(context.Background())
+		db.Close()
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
 
 	return &Storage{db: db}, nil
 }
 
-func (s *Storage) Close(ctx context.Context) {
-	s.db.Close(ctx)
+func (s *Storage) Close() {
+	s.db.Close()
 }
 
 func (s *Storage) SaveURL(urlToSave string, alias string) error {

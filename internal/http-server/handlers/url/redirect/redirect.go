@@ -2,14 +2,15 @@ package redirect
 
 import (
 	"errors"
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/go-chi/render"
 	resp "go-urlshortner/internal/lib/api/response"
 	"go-urlshortner/internal/lib/logger/sl"
 	"go-urlshortner/internal/storage"
 	"log/slog"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/render"
 )
 
 type URLGetter interface {
@@ -25,7 +26,7 @@ func New(log *slog.Logger, urlGetter URLGetter) http.HandlerFunc {
 			slog.String("request_id", middleware.GetReqID(r.Context())),
 		)
 
-		alias := chi.URLParam(r,"alias")
+		alias := chi.URLParam(r, "alias")
 
 		if alias == "" {
 			log.Info("alias is empty")

@@ -2,15 +2,16 @@ package save
 
 import (
 	"errors"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/go-chi/render"
-	"github.com/go-playground/validator/v10"
 	resp "go-urlshortner/internal/lib/api/response"
 	"go-urlshortner/internal/lib/logger/sl"
 	"go-urlshortner/internal/lib/random"
 	"go-urlshortner/internal/storage"
 	"log/slog"
 	"net/http"
+
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/render"
+	"github.com/go-playground/validator/v10"
 )
 
 type Request struct {
@@ -86,7 +87,7 @@ func New(log *slog.Logger, urlSaver URLSaver) http.HandlerFunc {
 		}
 
 		log.Info("url added", slog.String("alias", alias))
-		
+
 		render.JSON(w, r, Response{
 			Response: resp.OK(),
 			Alias:    alias,

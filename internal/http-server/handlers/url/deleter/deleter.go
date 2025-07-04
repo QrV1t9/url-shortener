@@ -2,14 +2,15 @@ package deleter
 
 import (
 	"errors"
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/go-chi/render"
 	resp "go-urlshortner/internal/lib/api/response"
 	"go-urlshortner/internal/lib/logger/sl"
 	"go-urlshortner/internal/storage"
 	"log/slog"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/render"
 )
 
 type Response struct {

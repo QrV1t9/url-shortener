@@ -6,8 +6,9 @@ import (
 	"io"
 	stdLog "log"
 
-	"github.com/fatih/color"
 	"log/slog"
+
+	"github.com/fatih/color"
 )
 
 type PrettyHandlerOptions struct {
