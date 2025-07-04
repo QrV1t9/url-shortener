@@ -1,6 +1,7 @@
 package main
 
 import (
+	ssogrpc "go-urlshortner/internal/clients/sso/grpc"
 	"go-urlshortner/internal/config"
 	"go-urlshortner/internal/http-server/handlers/url/deleter"
 	"go-urlshortner/internal/http-server/handlers/url/redirect"
@@ -29,6 +30,14 @@ func main() {
 
 	log.Info("Starting url-shortener", slog.String("env", cfg.Env))
 	log.Debug("debug messages are enabled")
+
+	// TODO: Use this in handlers
+
+	_, err := ssogrpc.New(log, cfg.Client.SSO.Address, cfg.Client.SSO.Timeout, cfg.Client.SSO.RetriesCount)
+	if err != nil {
+		log.Error("failed to init sso client", sl.Err(err))
+		os.Exit(1)
+	}
 
 	storage, err := postgres.New(cfg.StorageUrl)
 	if err != nil {
